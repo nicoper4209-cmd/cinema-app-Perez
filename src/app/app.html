@@ -1,0 +1,10 @@
+<nav>
+  <a routerLink="/board" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Tablero</a>
+  <a routerLink="/tasks" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Tareas</a>
+  <a routerLink="/tasks/new" routerLinkActive="active" [routerLinkActiveOptions]="{ exact: true }">Nueva tarea</a>
+  @if (auth.session(); as session) {
+    <span>Hola, {{ session.user.email }}</span>
+    <button type="button" (click)="logout()">Salir</button>
+  }
+</nav>
+<router-outlet />

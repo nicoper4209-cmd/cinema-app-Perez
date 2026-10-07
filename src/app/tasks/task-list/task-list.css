@@ -1,0 +1,15 @@
+/* :host estila el propio tag <app-task-list> — nada se filtra a otros componentes */ 
+:host { 
+  display: block; 
+  max-width: 560px; 
+  font-family: system-ui, sans-serif; 
+} 
+ 
+input { 
+  width: 100%; 
+  padding: 8px 10px; 
+  margin: 8px 0 12px; 
+  border: 1px solid #c9c9c9; 
+  border-radius: 6px; 
+  box-sizing: border-box; 
+} 

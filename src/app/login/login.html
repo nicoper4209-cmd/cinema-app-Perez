@@ -1,0 +1,5 @@
+@if (auth.session(); as s) {
+  <p>Ya iniciaste sesión como {{ s.user.email }}.</p>
+} @else {
+  <button type="button" (click)="auth.login()">Entrar con GitHub</button>
+}

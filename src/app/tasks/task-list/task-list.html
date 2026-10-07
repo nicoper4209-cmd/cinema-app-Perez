@@ -1,0 +1,20 @@
+<h2>Tareas</h2>
+
+<input type="text"  
+placeholder="Buscar tarea..." 
+[value]="filter()" 
+(input) ="filter.set($any($event.target).value)">
+
+
+@for (t of tasks(); track t.id){
+    <a [routerLink]="['/tasks',t.id]">
+    <app-task-card
+        [task]="t"
+        [days]="3"
+        cardSize="lg"
+        (done)="markDone($event)"
+        (deleted)="remove($event)"/>
+    </a>
+}@empty{
+    <p class="empty">Sin tareas todavía</p>
+}
