@@ -1,0 +1,44 @@
+@if (pelicula(); as peliculaActual) {
+  <section class="compra-shell">
+    <header class="topbar">
+      <div>
+        <p class="eyebrow">Seleccionar butacas</p>
+        <h1>{{ peliculaActual.titulo }}</h1>
+      </div>
+      <a class="button secondary" routerLink="/cartelera">Volver</a>
+    </header>
+
+    @if (funcion(); as funcionActual) {
+      <div class="info-funcion">
+        <span>{{ funcionActual.fechaHoraInicio | date: 'dd/MM/yyyy' }}</span>
+        <span>{{ funcionActual.fechaHoraInicio | date: 'HH:mm' }} - {{ funcionActual.fechaHoraFin | date: 'HH:mm' }}</span>
+        <span>Precio base: ${{ funcionActual.precioBase }}</span>
+      </div>
+    }
+
+    <div class="pantalla">Pantalla</div>
+
+    <div class="sala-grid">
+      @for (butaca of butacas(); track butaca.id) {
+        <button
+          type="button"
+          class="butaca"
+          [class.selected]="isSeleccionada(butaca.id)"
+          [class.vip]="butaca.tipo === 'vip'"
+          [class.accesible]="butaca.tipo === 'accesible'"
+          [disabled]="false">
+          {{ butaca.fila }}{{ butaca.numero }}
+        </button>
+      }
+    </div>
+
+    <div class="resumen">
+      <h3>Resumen</h3>
+      <p>Butacas seleccionadas: {{ seleccionada.size }}</p>
+      <p>Total estimado: ${{ costoTotal() }}</p>
+      <button type="button" class="button primary">Continuar</button>
+    </div>
+  </section>
+} @else {
+  <p class="status empty-state">No se pudo cargar la película.</p>
+}

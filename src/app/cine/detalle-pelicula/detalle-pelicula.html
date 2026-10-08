@@ -1,0 +1,55 @@
+@if (pelicula(); as peliculaActual) {
+  <article class="detalle-shell">
+    <div class="poster" [style.background-image]="'linear-gradient(135deg, rgba(15,23,42,0.1), rgba(15,23,42,0.75)), url(' + (peliculaActual.posterUrl || 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80') + ')'" ></div>
+
+    <div class="info">
+      <p class="eyebrow">{{ peliculaActual.genero }}</p>
+      <h1>{{ peliculaActual.titulo }}</h1>
+      <div class="meta-row">
+        <span>{{ peliculaActual.clasificacion }}</span>
+        <span>{{ peliculaActual.duracionMinutos }} min</span>
+        <span>{{ peliculaActual.valoracionPromedio.toFixed(1) }} ★</span>
+      </div>
+
+      <p class="sinopsis">{{ peliculaActual.sinopsis || 'Sinopsis no disponible.' }}</p>
+
+      <div class="acciones">
+        <a class="button primary" [routerLink]="['/compra', peliculaActual.id]">Comprar entradas</a>
+        <a class="button secondary" routerLink="/cartelera">Volver a cartelera</a>
+      </div>
+    </div>
+  </article>
+
+  <section class="funciones">
+    <h2>Funciones</h2>
+
+    @if (cargando()) {
+      <p class="status">Cargando funciones…</p>
+    }
+
+    @if (error()) {
+      <p class="status error">{{ error() }}</p>
+    }
+
+    @if (funciones().length) {
+      <div class="lista-funciones">
+        @for (funcion of funciones(); track funcion.id) {
+          <div class="funcion-card">
+            <div>
+              <strong>{{ funcion.fechaHoraInicio | date: 'dd/MM/yyyy' }}</strong>
+              <p>{{ funcion.fechaHoraInicio | date: 'HH:mm' }} - {{ funcion.fechaHoraFin | date: 'HH:mm' }}</p>
+            </div>
+            <div class="precio-box">
+              <span>Desde ${{ funcion.precioBase }}</span>
+              <a [routerLink]="['/compra', peliculaActual.id, funcion.id]">Seleccionar</a>
+            </div>
+          </div>
+        }
+      </div>
+    } @else {
+      <p class="status empty-state">No hay funciones disponibles para esta película.</p>
+    }
+  </section>
+} @else {
+  <p class="status empty-state">No se encontró la película.</p>
+}

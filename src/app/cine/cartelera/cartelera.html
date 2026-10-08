@@ -20,7 +20,9 @@
     <div class="grid top-grid">
       @for (pelicula of top3(); track pelicula.id) {
         <article class="card pelicula-card">
-          <div class="poster" [style.background-image]="'linear-gradient(135deg, rgba(10,10,20,0.2), rgba(10,10,20,0.8)), url(' + (pelicula.posterUrl || 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80') + ')'"></div>
+          <a [routerLink]="['/pelicula', pelicula.id]" class="poster-link">
+            <div class="poster" [style.background-image]="'linear-gradient(135deg, rgba(10,10,20,0.2), rgba(10,10,20,0.8)), url(' + (pelicula.posterUrl || 'https://images.unsplash.com/photo-1517604931442-7e0c8ed2963c?auto=format&fit=crop&w=800&q=80') + ')'" ></div>
+          </a>
           <div class="content">
             <span class="badge">{{ pelicula.clasificacion }}</span>
             <h3>{{ pelicula.titulo }}</h3>
@@ -40,7 +42,9 @@
     <div class="grid movie-grid">
       @for (pelicula of enCartelera(); track pelicula.id) {
         <article class="card pelicula-card large">
-          <div class="poster" [style.background-image]="'linear-gradient(135deg, rgba(10,10,20,0.25), rgba(10,10,20,0.8)), url(' + (pelicula.posterUrl || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80') + ')'"></div>
+          <a [routerLink]="['/pelicula', pelicula.id]" class="poster-link">
+            <div class="poster" [style.background-image]="'linear-gradient(135deg, rgba(10,10,20,0.25), rgba(10,10,20,0.8)), url(' + (pelicula.posterUrl || 'https://images.unsplash.com/photo-1489599849927-2ee91cede3ba?auto=format&fit=crop&w=900&q=80') + ')'"></div>
+          </a>
           <div class="content">
             <div class="head-row">
               <span class="badge">{{ pelicula.clasificacion }}</span>
@@ -65,7 +69,9 @@
     <div class="grid upcoming-grid">
       @for (pelicula of proximamente(); track pelicula.id) {
         <article class="card upcoming-card">
-          <div class="poster small" [style.background-image]="'url(' + (pelicula.posterUrl || 'https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=700&q=80') + ')'" ></div>
+          <a [routerLink]="['/pelicula', pelicula.id]" class="poster-link">
+            <div class="poster small" [style.background-image]="'url(' + (pelicula.posterUrl || 'https://images.unsplash.com/photo-1513106580091-1d82408b8cd6?auto=format&fit=crop&w=700&q=80') + ')'" ></div>
+          </a>
           <div class="content">
             <h3>{{ pelicula.titulo }}</h3>
             <p>{{ pelicula.fechaEstreno ? ('Estreno: ' + pelicula.fechaEstreno) : 'Sin fecha definida' }}</p>

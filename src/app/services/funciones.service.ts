@@ -4,6 +4,20 @@ import { Funcion } from '../cine/cine.model';
 
 @Injectable({ providedIn: 'root' })
 export class FuncionesService {
+  private mapFuncion(row: any): Funcion {
+    return {
+      id: row.id,
+      peliculaId: row.pelicula_id,
+      salaId: row.sala_id,
+      fechaHoraInicio: row.fecha_hora_inicio,
+      fechaHoraFin: row.fecha_hora_fin,
+      precioBase: Number(row.precio_base ?? 0),
+      precioVip: Number(row.precio_vip ?? 0),
+      precioAccesible: Number(row.precio_accesible ?? 0),
+      creadaEn: row.creada_en,
+    };
+  }
+
   async listarPorPelicula(peliculaId: number): Promise<Funcion[]> {
     const { data, error } = await supabase
       .from('funciones')
@@ -12,7 +26,7 @@ export class FuncionesService {
       .order('fecha_hora_inicio', { ascending: true });
 
     if (error) throw error;
-    return (data ?? []) as Funcion[];
+    return (data ?? []).map((row) => this.mapFuncion(row));
   }
 
   async obtenerPorId(id: number): Promise<Funcion | null> {
@@ -23,7 +37,7 @@ export class FuncionesService {
       .maybeSingle();
 
     if (error) throw error;
-    return (data ?? null) as Funcion | null;
+    return data ? this.mapFuncion(data) : null;
   }
 
   async crearFuncion(funcion: Partial<Funcion>): Promise<Funcion> {
@@ -34,6 +48,6 @@ export class FuncionesService {
       .single();
 
     if (error) throw error;
-    return data as Funcion;
+    return this.mapFuncion(data);
   }
 }

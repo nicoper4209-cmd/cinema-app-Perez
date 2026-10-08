@@ -1,0 +1,139 @@
+.compra-shell {
+  min-height: 100vh;
+  padding: 2rem;
+  background: #0f172a;
+  color: #f8fafc;
+}
+
+.topbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 1rem;
+  margin-bottom: 1.5rem;
+}
+
+.eyebrow {
+  margin: 0;
+  color: #cbd5e1;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  font-size: 0.72rem;
+}
+
+.topbar h1 {
+  margin: 0.45rem 0 0;
+}
+
+.button {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.8rem 1rem;
+  border-radius: 12px;
+  text-decoration: none;
+  font-weight: 700;
+  border: none;
+  cursor: pointer;
+}
+
+.button.primary {
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #111827;
+}
+
+.button.secondary {
+  background: rgba(148, 163, 184, 0.12);
+  color: #f8fafc;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.info-funcion {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  color: #dbeafe;
+  margin-bottom: 1rem;
+}
+
+.pantalla {
+  max-width: 760px;
+  margin: 0 auto 1.5rem;
+  text-align: center;
+  padding: 0.8rem;
+  border-radius: 10px 10px 0 0;
+  background: linear-gradient(180deg, #374151, #1f2937);
+  color: #e2e8f0;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+}
+
+.sala-grid {
+  display: grid;
+  gap: 0.65rem;
+  grid-template-columns: repeat(auto-fit, minmax(56px, 1fr));
+  max-width: 760px;
+  margin: 0 auto;
+}
+
+.butaca {
+  min-height: 52px;
+  border: none;
+  border-radius: 10px;
+  background: #1e293b;
+  color: #f8fafc;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform 0.15s ease, filter 0.15s ease;
+}
+
+.butaca:hover {
+  transform: translateY(-1px);
+  filter: brightness(1.08);
+}
+
+.butaca.selected {
+  background: linear-gradient(135deg, #22c55e, #16a34a);
+  color: #052e16;
+}
+
+.butaca.vip {
+  background: #7c3aed;
+}
+
+.butaca.accesible {
+  background: #0ea5e9;
+}
+
+.resumen {
+  max-width: 760px;
+  margin: 2rem auto 0;
+  padding: 1rem;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.status {
+  margin: 0;
+  padding: 1rem;
+  background: rgba(15, 23, 42, 0.7);
+  border-radius: 12px;
+  border: 1px solid rgba(148, 163, 184, 0.2);
+  color: #e2e8f0;
+}
+
+.empty-state {
+  color: #cbd5e1;
+}
+
+@media (max-width: 640px) {
+  .compra-shell {
+    padding: 1rem;
+  }
+
+  .topbar {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
