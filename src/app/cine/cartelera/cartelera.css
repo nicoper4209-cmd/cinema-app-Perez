@@ -1,0 +1,166 @@
+.cine-shell {
+  display: grid;
+  gap: 2rem;
+  padding: 2rem;
+  color: #f3f4f6;
+  background: #0f172a;
+  min-height: 100vh;
+}
+
+.hero {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  padding: 2rem;
+  border-radius: 20px;
+  background: linear-gradient(135deg, #111827, #1f2937 35%, #0f172a);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.eyebrow {
+  margin: 0;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: #cbd5e1;
+  font-size: 0.72rem;
+}
+
+.hero h1 {
+  margin: 0.4rem 0 0;
+  font-size: clamp(2rem, 5vw, 3.5rem);
+}
+
+.cta {
+  border: none;
+  background: linear-gradient(135deg, #f59e0b, #f97316);
+  color: #111827;
+  font-weight: 700;
+  padding: 0.9rem 1.2rem;
+  border-radius: 999px;
+  cursor: pointer;
+}
+
+.section {
+  display: grid;
+  gap: 1rem;
+}
+
+.section h2 {
+  margin: 0;
+  font-size: 1.5rem;
+}
+
+.grid {
+  display: grid;
+  gap: 1rem;
+}
+
+.top-grid {
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+}
+
+.movie-grid,
+.upcoming-grid {
+  grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+}
+
+.card {
+  overflow: hidden;
+  border-radius: 18px;
+  background: rgba(15, 23, 42, 0.9);
+  border: 1px solid rgba(148, 163, 184, 0.15);
+  box-shadow: 0 8px 20px rgba(15, 23, 42, 0.25);
+}
+
+.pelicula-card {
+  display: grid;
+}
+
+.poster {
+  min-height: 230px;
+  background-size: cover;
+  background-position: center;
+}
+
+.poster.small {
+  min-height: 180px;
+  background-size: cover;
+  background-position: center;
+}
+
+.content {
+  padding: 1rem;
+  display: grid;
+  gap: 0.7rem;
+}
+
+.head-row,
+.meta {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 0.75rem;
+  color: #cbd5e1;
+  font-size: 0.8rem;
+}
+
+.badge {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.25rem 0.6rem;
+  border-radius: 999px;
+  background: rgba(59, 130, 246, 0.18);
+  color: #bfdbfe;
+  font-size: 0.72rem;
+  font-weight: 700;
+}
+
+.badge.soft {
+  background: rgba(251, 191, 36, 0.18);
+  color: #fcd34d;
+}
+
+.content h3 {
+  margin: 0;
+  font-size: 1.2rem;
+}
+
+.content p {
+  margin: 0;
+  color: #dbe2ee;
+  line-height: 1.5;
+}
+
+.rating {
+  color: #fbbf24;
+  font-weight: 700;
+}
+
+.status {
+  margin: 0;
+  padding: 1rem 1.2rem;
+  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.7);
+  border: 1px solid rgba(148, 163, 184, 0.2);
+}
+
+.status.error {
+  border-color: rgba(248, 113, 113, 0.4);
+  color: #fecaca;
+}
+
+.empty-state {
+  color: #cbd5e1;
+}
+
+@media (max-width: 640px) {
+  .cine-shell {
+    padding: 1rem;
+  }
+
+  .hero {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
