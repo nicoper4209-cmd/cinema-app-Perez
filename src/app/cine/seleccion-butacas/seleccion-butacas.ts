@@ -1,5 +1,5 @@
 import { DatePipe } from '@angular/common';
-import { Component, computed, inject, input } from '@angular/core';
+import { Component, computed, effect, inject, input, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { CineStore } from '../cine-store.service';
 import { Butaca, Funcion } from '../cine.model';
@@ -26,35 +26,97 @@ export class SeleccionButacas {
 
   readonly butacas = this.store.butacas;
   readonly disponibilidad = this.store.disponibilidad;
+  readonly cargando = this.store.cargando;
+  readonly error = this.store.error;
+  readonly butacasSeleccionadas = computed(() =>
+    this.butacas().filter((butaca) => this.seleccionada().has(butaca.id))
+  );
+  readonly seleccionada = signal<Set<number>>(new Set());
 
-  seleccionada = new Set<number>();
+  readonly pagoConfirmado = signal(false);
+  readonly codigoCompra = signal('');
+  readonly mensajePago = signal('');
 
   constructor() {
-    const id = this.funcionId();
-    if (id) {
+    effect(() => {
+      const id = this.funcionId();
+      const funcion = this.funcion();
+      if (!id) return;
+
+      if (!funcion) {
+        void this.store.cargarFuncionPorId(id);
+        return;
+      }
+
+      this.seleccionada.set(new Set());
+      void this.store.cargarButacasPorSala(funcion.salaId);
       void this.store.cargarDisponibilidadFuncion(id);
-    }
+    });
   }
 
   toggleButaca(butaca: Butaca): void {
-    if (this.seleccionada.has(butaca.id)) {
-      this.seleccionada.delete(butaca.id);
-      return;
-    }
+    if (!this.butacaDisponible(butaca.id)) return;
 
-    this.seleccionada.add(butaca.id);
+    this.seleccionada.update((actual) => {
+      const nueva = new Set(actual);
+      if (nueva.has(butaca.id)) nueva.delete(butaca.id);
+      else nueva.add(butaca.id);
+      return nueva;
+    });
   }
 
   isSeleccionada(butacaId: number): boolean {
-    return this.seleccionada.has(butacaId);
+    return this.seleccionada().has(butacaId);
+  }
+
+  butacaDisponible(butacaId: number): boolean {
+    const estado = this.disponibilidad().find((item) => item.butacaId === butacaId)?.estado;
+    return !estado || estado === 'disponible';
+  }
+
+  claseButaca(butacaId: number): string {
+    return this.disponibilidad().find((item) => item.butacaId === butacaId)?.estado ?? 'disponible';
   }
 
   costoTotal(): number {
-    const seleccionadas = Array.from(this.seleccionada);
-    if (!seleccionadas.length) return 0;
+    const seleccionadas = this.seleccionada();
+    if (!seleccionadas.size) return 0;
 
     return this.butacas()
-      .filter((butaca) => seleccionadas.includes(butaca.id))
-      .reduce((total, butaca) => total + butaca.precio, 0);
+      .filter((butaca) => seleccionadas.has(butaca.id))
+      .reduce((total, butaca) => {
+        const precioDisponibilidad = this.disponibilidad().find((item) => item.butacaId === butaca.id)?.precioFinal;
+        const precioPorTipo = butaca.tipo === 'vip'
+          ? this.funcion()?.precioVip
+          : butaca.tipo === 'accesible'
+            ? this.funcion()?.precioAccesible
+            : this.funcion()?.precioBase;
+        return total + (precioDisponibilidad || precioPorTipo || butaca.precio);
+      }, 0);
+  }
+
+  simularPago(): void {
+    if (!this.seleccionada().size) {
+      this.pagoConfirmado.set(false);
+      this.codigoCompra.set('');
+      this.mensajePago.set('Selecciona al menos una butaca antes de continuar.');
+      return;
+    }
+
+    if (!this.funcion()) {
+      this.pagoConfirmado.set(false);
+      this.codigoCompra.set('');
+      this.mensajePago.set('No se pudo encontrar la función seleccionada.');
+      return;
+    }
+
+    const total = this.costoTotal();
+    const codigo = `CINE-${Date.now().toString().slice(-8)}`;
+
+    this.codigoCompra.set(codigo);
+    this.pagoConfirmado.set(true);
+    this.mensajePago.set(
+      `Pago simulado exitoso. Se generó el comprobante PDF y el QR de la compra por $${total}.`
+    );
   }
 }

@@ -16,28 +16,80 @@
       </div>
     }
 
-    <div class="pantalla">Pantalla</div>
+    @if (cargando() && !butacas().length) {
+      <p class="status">Cargando butacas...</p>
+    } @else if (error()) {
+      <p class="status warning">{{ error() }}</p>
+    } @else if (!funcion()) {
+      <p class="status warning">No se encontró la función. Volvé al detalle y seleccioná un horario.</p>
+    } @else if (!butacas().length) {
+      <p class="status warning">Esta sala todavía no tiene butacas cargadas.</p>
+    } @else {
+      <div class="pantalla">Pantalla</div>
 
-    <div class="sala-grid">
-      @for (butaca of butacas(); track butaca.id) {
-        <button
-          type="button"
-          class="butaca"
-          [class.selected]="isSeleccionada(butaca.id)"
-          [class.vip]="butaca.tipo === 'vip'"
-          [class.accesible]="butaca.tipo === 'accesible'"
-          [disabled]="false">
-          {{ butaca.fila }}{{ butaca.numero }}
-        </button>
-      }
-    </div>
+      <div class="sala-grid">
+        @for (butaca of butacas(); track butaca.id) {
+          <button
+            type="button"
+            class="butaca"
+            [class.selected]="isSeleccionada(butaca.id)"
+            [class.vip]="butaca.tipo === 'vip'"
+            [class.accesible]="butaca.tipo === 'accesible'"
+            [class.ocupada]="!butacaDisponible(butaca.id)"
+            [attr.aria-pressed]="isSeleccionada(butaca.id)"
+            [attr.aria-label]="'Butaca ' + butaca.fila + butaca.numero + (butacaDisponible(butaca.id) ? ', disponible' : ', ocupada')"
+            [disabled]="!butacaDisponible(butaca.id)"
+            (click)="toggleButaca(butaca)">
+            {{ butaca.fila }}{{ butaca.numero }}
+          </button>
+        }
+      </div>
+    }
 
     <div class="resumen">
       <h3>Resumen</h3>
-      <p>Butacas seleccionadas: {{ seleccionada.size }}</p>
+      <p>Butacas seleccionadas: {{ seleccionada().size }}</p>
+      @if (butacasSeleccionadas().length) {
+        <p>Asientos: {{ butacasSeleccionadas().map((butaca) => butaca.fila + butaca.numero).join(', ') }}</p>
+      }
       <p>Total estimado: ${{ costoTotal() }}</p>
-      <button type="button" class="button primary">Continuar</button>
+
+      <button
+        type="button"
+        class="button primary"
+        [disabled]="!seleccionada().size || pagoConfirmado()"
+        (click)="simularPago()">
+        {{ pagoConfirmado() ? 'Pago realizado' : 'Simular pago' }}
+      </button>
     </div>
+
+    @if (mensajePago()) {
+      <div class="status" [class.warning]="!pagoConfirmado()" [class.success]="pagoConfirmado()">
+        {{ mensajePago() }}
+      </div>
+    }
+
+    @if (pagoConfirmado()) {
+      <div class="confirmacion">
+        <div class="qr-box">QR</div>
+
+        <div class="confirmacion-texto">
+          <p class="badge">Compra confirmada</p>
+          <h3>Pedido {{ codigoCompra() }}</h3>
+          <p>
+            Película: <strong>{{ peliculaActual.titulo }}</strong>
+          </p>
+          <p>
+            Función: {{ funcion()?.fechaHoraInicio | date: 'dd/MM/yyyy HH:mm' }}
+          </p>
+          <p>
+            Butacas: {{ butacasSeleccionadas().map((butaca) => butaca.fila + butaca.numero).join(', ') }}
+          </p>
+          <p>Importe total: ${{ costoTotal() }}</p>
+          <p>Comprobante PDF: generado correctamente</p>
+        </div>
+      </div>
+    }
   </section>
 } @else {
   <p class="status empty-state">No se pudo cargar la película.</p>

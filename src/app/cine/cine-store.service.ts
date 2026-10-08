@@ -48,6 +48,17 @@ export class CineStore {
     }
   }
 
+  async cargarFuncionPorId(funcionId: number): Promise<void> {
+    try {
+      const funcion = await this.funcionesService.obtenerPorId(funcionId);
+      if (funcion && !this.funciones().some((item) => item.id === funcion.id)) {
+        this.funciones.update((funciones) => [...funciones, funcion]);
+      }
+    } catch (err) {
+      this.error.set(this.messageFromError(err, 'No se pudo cargar la función.'));
+    }
+  }
+
   async cargarButacasPorSala(salaId: number): Promise<void> {
     this.cargando.set(true);
     this.error.set(null);
