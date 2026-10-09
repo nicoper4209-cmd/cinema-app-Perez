@@ -54,12 +54,115 @@
       }
       <p>Total estimado: ${{ costoTotal() }}</p>
 
+      @if (!seleccionContigua() && seleccionada().size > 1) {
+        <p class="status warning">Las butacas deben ser contiguas y pertenecer a la misma fila.</p>
+      }
+
+      @if (butacasSeleccionadas().some((butaca) => butaca.tipo === 'vip')) {
+        <p class="status warning">Incluiste butacas VIP, con precio superior al estándar.</p>
+      }
+
+      <div class="datos-comprador">
+        <h3>Datos del comprador</h3>
+        <label>
+          Nombre
+          <input
+            type="text"
+            autocomplete="name"
+            [value]="compradorNombre()"
+            (input)="compradorNombre.set($any($event.target).value)" />
+        </label>
+        <label>
+          Correo electrónico
+          <input
+            type="email"
+            autocomplete="email"
+            [value]="compradorEmail()"
+            (input)="compradorEmail.set($any($event.target).value)" />
+        </label>
+        <label>
+          Fecha de nacimiento
+          <span class="fecha-nacimiento">
+            <input
+              type="text"
+              inputmode="numeric"
+              list="dias-nacimiento"
+              maxlength="2"
+              placeholder="Día"
+              aria-label="Día de nacimiento"
+              [value]="diaNacimiento()"
+              (input)="diaNacimiento.set($any($event.target).value)" />
+            <datalist id="dias-nacimiento">
+              @for (dia of diasNacimiento; track dia) {
+                <option [value]="dia"></option>
+              }
+            </datalist>
+
+            <input
+              type="text"
+              inputmode="numeric"
+              list="meses-nacimiento"
+              maxlength="2"
+              placeholder="Mes"
+              aria-label="Mes de nacimiento"
+              [value]="mesNacimiento()"
+              (input)="mesNacimiento.set($any($event.target).value)" />
+            <datalist id="meses-nacimiento">
+              @for (mes of mesesNacimiento; track mes.valor) {
+                <option [value]="mes.valor" [label]="mes.nombre"></option>
+              }
+            </datalist>
+
+            <input
+              type="text"
+              inputmode="numeric"
+              list="anios-nacimiento"
+              maxlength="4"
+              placeholder="Año"
+              aria-label="Año de nacimiento"
+              [value]="anioNacimiento()"
+              (input)="anioNacimiento.set($any($event.target).value)" />
+            <datalist id="anios-nacimiento">
+              @for (anio of aniosNacimiento; track anio) {
+                <option [value]="anio"></option>
+              }
+            </datalist>
+          </span>
+        </label>
+        <p class="nota">Elegí una sugerencia o escribí día, mes y año. Se usa para validar la clasificación.</p>
+      </div>
+
+      <div class="beneficios-compra">
+        <label>
+          Código de cupón
+          <input
+            type="text"
+            autocomplete="off"
+            [value]="codigoCupon()"
+            (input)="codigoCupon.set($any($event.target).value)" />
+        </label>
+        @if (puntosDisponibles() > 0) {
+          <label>
+            Puntos a canjear (saldo: {{ puntosDisponibles() }})
+            <input
+              type="number"
+              min="0"
+              step="1"
+              [max]="puntosDisponibles()"
+              [value]="puntosAUsar()"
+              (input)="puntosAUsar.set(+$any($event.target).value)" />
+          </label>
+        } @else {
+          <p class="nota">Inicia sesión para acumular y canjear puntos.</p>
+        }
+      </div>
+
       <button
         type="button"
         class="button primary"
-        [disabled]="!seleccionada().size || pagoConfirmado()"
+        [disabled]="!seleccionada().size || !seleccionContigua() || pagoConfirmado() || procesandoCompra()"
         (click)="simularPago()">
-        {{ pagoConfirmado() ? 'Pago realizado' : 'Simular pago' }}
+        {{ procesandoCompra() ? 'Registrando...' : pagoConfirmado() ? 'Compra confirmada' : 'Confirmar compra simulada' }}
       </button>
     </div>
 
@@ -71,11 +174,9 @@
 
     @if (pagoConfirmado()) {
       <div class="confirmacion">
-        <div class="qr-box">QR</div>
-
         <div class="confirmacion-texto">
           <p class="badge">Compra confirmada</p>
-          <h3>Pedido {{ codigoCompra() }}</h3>
+          <h3>Pedido #{{ codigoCompra() }}</h3>
           <p>
             Película: <strong>{{ peliculaActual.titulo }}</strong>
           </p>
@@ -85,8 +186,30 @@
           <p>
             Butacas: {{ butacasSeleccionadas().map((butaca) => butaca.fila + butaca.numero).join(', ') }}
           </p>
-          <p>Importe total: ${{ costoTotal() }}</p>
-          <p>Comprobante PDF: generado correctamente</p>
+          @if (descuentoConfirmado() > 0) {
+            <p>Descuentos aplicados: ${{ descuentoConfirmado() }}</p>
+          }
+          <p>Importe total: ${{ totalConfirmado() }}</p>
+          @if (puntosUsadosConfirmados() > 0 || puntosObtenidosConfirmados() > 0) {
+            <p>Puntos usados: {{ puntosUsadosConfirmados() }}. Puntos obtenidos: {{ puntosObtenidosConfirmados() }}.</p>
+          }
+          @for (entrada of entradasConfirmadas(); track entrada.entradaId) {
+            <div class="entrada-confirmada">
+              <img [src]="entrada.qrDataUrl" [alt]="'Código QR para la butaca ' + etiquetaButaca(entrada.butacaId)" />
+              <div>
+                <strong>Butaca {{ etiquetaButaca(entrada.butacaId) }}</strong>
+                <p><code>{{ entrada.codigoQr }}</code></p>
+                <p>Importe: ${{ entrada.precio }}</p>
+              </div>
+            </div>
+          }
+          <button
+            type="button"
+            class="button secondary"
+            [disabled]="!qrListo()"
+            (click)="descargarComprobante()">
+            Descargar comprobante PDF
+          </button>
         </div>
       </div>
     }

@@ -30,6 +30,10 @@ export class DetallePelicula implements OnInit {
   readonly cargando = this.store.cargando;
   readonly error = this.store.error;
 
+  irAFunciones(): void {
+    document.getElementById('funciones')?.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  }
+
   ngOnInit(): void {
     const id = this.peliculaId();
     void this.store.cargarFuncionesPorPelicula(id);

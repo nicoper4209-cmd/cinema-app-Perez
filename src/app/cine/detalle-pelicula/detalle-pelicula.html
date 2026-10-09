@@ -14,13 +14,13 @@
       <p class="sinopsis">{{ peliculaActual.sinopsis || 'Sinopsis no disponible.' }}</p>
 
       <div class="acciones">
-        <a class="button primary" [routerLink]="['/compra', peliculaActual.id]">Comprar entradas</a>
+        <button type="button" class="button primary" (click)="irAFunciones()">Comprar entradas</button>
         <a class="button secondary" routerLink="/cartelera">Volver a cartelera</a>
       </div>
     </div>
   </article>
 
-  <section class="funciones">
+  <section id="funciones" class="funciones">
     <h2>Funciones</h2>
 
     @if (cargando()) {

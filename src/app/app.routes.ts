@@ -12,7 +12,9 @@ import { TaskForm } from './tasks/task-form/task-form';
 export const routes: Routes = [
     { path: '', pathMatch: 'full', redirectTo: 'cartelera' },
     { path: 'login', component: Login, canActivate: [guestGuard] },
-    { path: 'cartelera', component: Cartelera },
+    { path: 'cartelera', component: Cartelera, data: { vista: 'cartelera' } },
+    { path: 'top3', component: Cartelera, data: { vista: 'top3' } },
+    { path: 'proximamente', component: Cartelera, data: { vista: 'proximamente' } },
     { path: 'pelicula/:peliculaId', component: DetallePelicula },
     { path: 'compra/:peliculaId/:funcionId', component: SeleccionButacas },
     { path: 'compra/:peliculaId', component: SeleccionButacas },

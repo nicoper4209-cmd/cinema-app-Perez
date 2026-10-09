@@ -122,6 +122,75 @@
   border: 1px solid rgba(148, 163, 184, 0.2);
 }
 
+.datos-comprador {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1.25rem 0;
+}
+
+.datos-comprador h3,
+.datos-comprador p {
+  margin: 0;
+}
+
+.datos-comprador label {
+  display: grid;
+  gap: 0.35rem;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.datos-comprador input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 8px;
+  background: #111827;
+  color: #f8fafc;
+  font: inherit;
+}
+
+.datos-comprador input:focus-visible {
+  outline: 2px solid #2dd4bf;
+  outline-offset: 2px;
+}
+
+.fecha-nacimiento {
+  display: grid;
+  grid-template-columns: minmax(4rem, 0.7fr) minmax(4rem, 0.7fr) minmax(5.5rem, 1fr);
+  gap: 0.5rem;
+}
+
+.nota {
+  color: #94a3b8;
+  font-size: 0.85rem;
+}
+
+.beneficios-compra {
+  display: grid;
+  gap: 0.8rem;
+  margin: 1.25rem 0;
+}
+
+.beneficios-compra label {
+  display: grid;
+  gap: 0.35rem;
+  color: #cbd5e1;
+  font-size: 0.9rem;
+}
+
+.beneficios-compra input {
+  width: 100%;
+  min-height: 44px;
+  padding: 0.65rem 0.75rem;
+  border: 1px solid rgba(148, 163, 184, 0.35);
+  border-radius: 8px;
+  background: #111827;
+  color: #f8fafc;
+  font: inherit;
+}
+
 .button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
@@ -144,9 +213,6 @@
 .confirmacion {
   max-width: 760px;
   margin: 1.5rem auto 0;
-  display: grid;
-  grid-template-columns: 120px 1fr;
-  gap: 1rem;
   padding: 1.25rem;
   border-radius: 18px;
   background: rgba(15, 118, 110, 0.12);
@@ -166,6 +232,28 @@
 
 .confirmacion-texto {
   color: #e2e8f0;
+}
+
+.entrada-confirmada {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin: 1rem 0;
+  padding: 0.75rem;
+  border: 1px solid rgba(45, 212, 191, 0.3);
+  border-radius: 8px;
+}
+
+.entrada-confirmada img {
+  width: 112px;
+  height: 112px;
+  flex: 0 0 auto;
+  background: white;
+}
+
+.entrada-confirmada p {
+  margin: 0.4rem 0;
+  overflow-wrap: anywhere;
 }
 
 .badge {
@@ -206,5 +294,14 @@
   .topbar {
     flex-direction: column;
     align-items: flex-start;
+  }
+
+  .entrada-confirmada {
+    align-items: flex-start;
+  }
+
+  .entrada-confirmada img {
+    width: 88px;
+    height: 88px;
   }
 }
